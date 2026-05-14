@@ -1,0 +1,276 @@
+{% extends 'components/base.html' %}
+{% load static %}
+
+            {% block styles %}
+            <!-- Custom styles here -->
+            {% endblock %}
+
+            {% block content %}
+            <!-- Page Header -->
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">{{ task.course.name }}</h1>
+                </div>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb breadcrumb-style">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item"><a href="#">Courses</a></li>
+                        <li class="breadcrumb-item"><a href="#">Course Task Lists</a></li>
+                        <li class="breadcrumb-item active">Modul Detail</li>
+                    </ol>
+                </nav>
+            </div>
+            <!-- END Page Header -->
+
+            <!-- Success Message -->
+            {% if messages %}
+                <div class="container">
+                    {% for message in messages %}
+                    <div class="alert alert-success alert-dismissible fade show p-0 mb-4" role="alert">
+                        <p class="py-3 px-5 mb-0 border-bottom border-bottom-success-light">
+                            <span class="alert-inner--icon me-2"><i class="fe fe-thumbs-up"></i></span>
+                            <strong>{{ message.tags|title }}!</strong>
+                        </p>
+                        <p class="py-3 px-5">{{ message }}</p>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            <!-- END Success Message -->
+
+            <!-- Page Info -->
+            <div class="container">
+                <div class="row w-100">
+
+                    <!-- Button Prev -->
+                    {% if previous_task %}
+                    <div class="col-md-2 d-flex align-items-center justify-content-start">
+                        <div class="btn-list">
+                            <a class="btn btn-primary btn-lg" href="{% url 'app:Modul_detail' course.id previous_task.id %}">
+                                <i class="typcn typcn-chevron-left"></i>
+                                <b>Level {{ previous_task.level }}</b>
+                            </a>
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="col-md-2 d-flex align-items-center justify-content-start invisible">
+                        <div class="btn-list">
+                            <a class="btn btn-primary btn-lg" href="#">
+                                <i class="typcn typcn-chevron-left"></i>
+                                <b>Level {{ task.level }}</b>
+                            </a>
+                        </div>
+                    </div>
+                    {% endif %}
+                    <!-- END Button Prev -->
+
+                   <!-- Progress Bar -->
+                    <div class="col-md-8">
+                        <div class="card">
+                            <div class="card-body p-4">
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <h4 class="m-0">Level {{ task.level }} - {{ task.name }}</h4>
+                                </div>
+                                <div class="clearfix">
+                                    <div class="col-md-12 mt-4">
+                                        <div class="text-center d-flex align-items-center justify-content-center">
+                                            <div class="wp-100">
+                                                <div class="progress progress-md mb-3">
+                                                    <div class="progress-bar progress-bar-animated bg-primary wp-0"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr>
+                                {% if is_admin %}
+                                <div class="btn-list text-end">
+                                    <a href="{% url 'app:modul_create' course_id=task.course.id task_id=task.id %}" class="btn btn-azure">Create Modul</a>
+                                    <a href="{% url 'app:quiz' course_id=task.course.id task_id=task.id %}" class="btn btn-azure">Try Quiz</a>
+                                </div>
+                                {% else %}
+                                <div class="btn-list text-end">
+                                    {% if not has_modules or not has_task_question_audio %}
+                                    <a href="#" class="btn btn-azure disabled">Continue Learning</a>
+                                    {% else %}
+                                    <a href="{% url 'app:quiz' course_id=task.course.id task_id=task.id %}" class="btn btn-azure">Continue Learning</a>
+                                    {% endif %}
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    <!-- END Progress Bar -->
+
+                    <!-- Button Next -->
+                    {% if next_task %}
+                    <div class="col-md-2 d-flex align-items-center justify-content-center">
+                        <div class="btn-list">
+                            <a class="btn btn-primary btn-lg" href="{% url 'app:Modul_detail' course.id next_task.id %}">
+                                <b>Level {{ next_task.level }}</b>
+                                <i class="typcn typcn-chevron-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                    {% endif %}
+                    <!-- END Button Next -->
+                     
+                </div>
+            </div>
+            <!-- END Page Info -->
+
+            <!-- Admin View -->
+            {% if is_admin %}
+            {% for modul in modul %}
+            <!-- Modal Delete -->
+            <div class="modal fade" id="deleteModal{{ modul.id }}" tabindex="-1" aria-labelledby="exampleModalLabel{{ modul.id }}" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel{{ modul.id }}">Delete Modul</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            Are you sure you want to delete the modul "<strong>{{ modul.name }}</strong>"?
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+                            <form action="{% url 'app:modul_delete' course_id=task.course.id task_id=task.id modul_id=modul.id %}" method="post">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger">Delete</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            <!-- END Modal Delete -->
+
+            <div class="container">
+                <div class="row w-100">        
+                    <div class="col-md-8 offset-md-2">
+                        <div class="card">
+                            <div class="card-body p-4">
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <div class="table-responsive">
+                                        <table class="table border align-middle text-md-nowrap table-hover">
+                                            <thead class="table-head">
+                                                <tr>
+                                                    <th class="text-center">Modul Name</th>
+                                                    <th class ="text-center">Description</th>
+                                                    <th class="text-center">Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="table-body">
+                                                {% for modul in modul %}
+                                                <tr>
+                                                    <td class="align-middle text-center" style="width: 35%;">
+                                                        <h6 class="mb-0 fs-14 fw-semibold">{{ modul.name }}</h6>
+                                                    </td>
+                                                    <td class="align-middle text-center" style="width: 45%;">
+                                                        <h6 class="mb-0 fs-14 fw-semibold">{{ modul.description }}</h6>
+                                                    </td>
+                                                    <td class="align-middle text-center" style="width: 20%; word-wrap: break-word; word-break: break-all;">
+                                                        <a href="{% url 'app:modul_edit' course_id=task.course.id task_id=task.id modul_id=modul.id %}" class="btn btn-sm btn-outline-primary border me-2" data-bs-toggle="tooltip" data-bs-original-title="Edit">
+                                                            <i class="fa fa-pencil fa-lg"></i>
+                                                        </a>|
+                                                        <a href="#" class="btn btn-sm btn-outline-danger border me-2 delete-button" data-bs-toggle="tooltip" data-bs-original-title="Delete" data-modal-target="#deleteModal{{ modul.id }}">
+                                                            <i class="fa fa-trash fa-lg"></i>
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            <!-- END Admin View -->
+            
+            <!-- User View -->
+            {% if not is_admin %}
+            <div class="container">
+                <div class="row w-100">
+                    <div class="col-md-8 offset-md-2">
+                        <div class="card">
+                            <div class="card-body p-4">
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <div class="table-responsive">
+                                        <table class="table border align-middle text-md-nowrap">
+                                            <thead class="table-head">
+                                                <tr>
+                                                    <th class="text-center">Modul Name</th>
+                                                    <th class="text-center">Description</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="table-body">
+                                                {% for modul in modul %}
+                                                <tr>
+                                                    <td class="align-middle text-center" style="width: 35%;">
+                                                        <h6 class="mb-0 fs-14 fw-semibold">{{ modul.name }}</h6>
+                                                    </td>
+                                                    <td class="align-middle text-center" style="width: 65%; word-wrap: break-word; word-break: break-all;">
+                                                        <h6 class="mb-0 fs-14 fw-semibold">{{ modul.description }}</h6>
+                                                    </td>
+                                                </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            <!-- END User View -->
+            
+            {% endblock %}
+            
+            {% block scripts %}
+            <!-- Bootstrap and dependencies -->
+            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+            <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.min.js"></script>
+            <script>
+                $(function () {
+                    $('[data-bs-toggle="tooltip"]').tooltip();
+            
+                    $('.delete-button').on('click', function() {
+                        var target = $(this).attr('data-modal-target');
+                        $(target).modal('show');
+                    });
+                });
+            </script>
+            <!-- INTERNAL SELECT2 JS -->
+            <script src="{% static 'assets/plugins/select2/select2.full.min.js' %}"></script>
+            
+            <!-- FILE UPLOAD JS -->
+            <script src="{% static 'assets/plugins/fileuploads/js/fileupload.js' %}"></script>
+            <script src="{% static 'assets/plugins/fileuploads/js/file-upload.js' %}"></script>
+            
+            <!-- bootstrap-datepicker js -->
+            <script src="{% static 'assets/plugins/bootstrap-datepicker/js/datepicker.js' %}"></script>
+            
+            <!-- INTERNAL Data tables js-->
+            <script src="{% static 'assets/plugins/datatable/js/jquery.dataTables.min.js' %}"></script>
+            <script src="{% static 'assets/plugins/datatable/js/dataTables.bootstrap5.js' %}"></script>
+            <script src="{% static 'assets/plugins/datatable/dataTables.responsive.min.js' %}"></script>
+            
+            <!-- PROJECT-DETAILS JS-->
+            <script src="{% static 'assets/js/project-details.js' %}"></script>
+            
+            <!-- COLOR THEME JS -->
+            <script src="{% static 'assets/js/themeColors.js' %}"></script>
+            
+            {% endblock %}
+                                        

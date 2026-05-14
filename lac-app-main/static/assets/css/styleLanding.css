@@ -1,0 +1,305 @@
+:root {
+    --primary-color: #2b3647;
+    --secondary-color: #ff9800;
+    --background-color: #2b3647;
+    --text-color: #ffffff;
+    --font-family: Arial, sans-serif;
+    --font-size: 16px;
+    --padding: 10px;
+    --margin: 20px;
+    --border-radius: 5px;
+    --box-shadow: 0 5px 5px rgba(0, 0, 0, 0.5);
+}
+
+body {
+    font-family: var(--font-family);
+    margin: 0;
+    padding: 0;
+    background-color: var(--background-color);
+    color: var(--text-color);
+}
+
+header {
+    background-color: var(--background-color);
+    padding: var(--padding) var(--padding);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--text-color);
+    box-shadow: var(--box-shadow);
+    position: sticky;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+header .logo {
+    margin-right: var(--margin);
+}
+
+header .dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    margin-right: auto;
+}
+
+header .dropbtn {
+    background-color: var(--secondary-color);
+    color: var(--text-color);
+    padding: var(--padding) var(--padding);
+    border: none;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+}
+
+.dropbtn:hover {
+    background-color: var(--background-color);
+}
+
+header .dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    background-color: var(--secondary-color);
+    min-width: 160px;
+    box-shadow: var(--box-shadow);
+    z-index: 1;
+}
+
+header .dropdown-content a {
+    color: var(--text-color);
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+header .dropdown-content a:hover {
+    background-color: var(--secondary-color);
+}
+
+header .dropdown:hover .dropdown-content {
+    display: block;
+}
+
+header .dropdown:hover .dropbtn {
+    background-color: var(--secondary-color);
+}
+
+header button {
+    background-color: var(--secondary-color);
+    border: none;
+    padding: var(--padding) var(--padding);
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    margin-left: var(--margin);
+}
+
+header .login {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    border: none;
+    padding: var(--padding) var(--padding);
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    margin-left: var(--margin);
+}
+
+header .login:hover {
+    background-color: var(--text-color);
+    color: var(--background-color);
+}
+
+header .startLearning:hover {
+    background-color: var(--text-color);
+    color: var(--background-color);
+}
+
+.login-container {
+    display: none;
+    text-align: center;
+    padding: var(--padding) 0;
+    background-color: var(--background-color);
+}
+
+section {
+    padding: var(--padding) var(--padding);
+    text-align: center;
+    margin-top: var(--margin);
+}
+
+.hero {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: var(--padding) var(--padding);
+}
+
+.hero-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    max-width: 1200px;
+    flex-wrap: wrap;
+}
+
+.hero-text {
+    max-width: 50%;
+    text-align: left;
+}
+
+.hero-images {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.hero img {
+    border-radius: var(--border-radius);
+    width: 100%;
+    max-width: 200px;
+}
+
+.hero button {
+    background-color: var(--secondary-color);
+    border: none;
+    padding: var(--padding) var(--padding);
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    margin-top: var(--margin);
+}
+
+.hero button:hover {
+    background-color: var(--secondary-color);
+    transform: translateY(-2px);
+}
+
+.language-rating {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background-color: var(--secondary-color);
+    color: var(--background-color);
+    padding: var(--padding);
+    border-radius: var(--border-radius);
+    margin-top: var(--margin);
+    width: 100%;
+    max-width: 1200px;
+    flex-wrap: wrap;
+}
+
+.language-rating .rating-item {
+    text-align: center;
+    flex: 1 1 100%;
+}
+
+.language-rating .rating-item p {
+    margin: 0;
+    font-weight: bold;
+}
+
+.helping {
+    margin-top: var(--margin);
+}
+
+.card {
+    display: inline-block;
+    margin: var(--margin);
+}
+
+.logos {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+.testimonial {
+    background-color: #fbf9f1;
+    padding: var(--padding) var(--padding);
+    color: var(--background-color);
+}
+
+.testimonial blockquote {
+    font-style: italic;
+    font-weight: bold;
+}
+
+.why-memrise button {
+    background-color: var(--secondary-color);
+    border: none;
+    padding: var(--padding) var(--padding);
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    margin-top: var(--margin);
+}
+
+.why-memrise button:hover {
+    background-color: var(--secondary-color);
+    transform: translateY(-2px);
+}
+
+.why-memrise img,
+.how-it-works img {
+    border-radius: var(--border-radius);
+    margin-bottom: var(--margin);
+}
+
+.plans {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.plan {
+    background-color: white;
+    padding: var(--padding);
+    margin: var(--margin);
+    border-radius: var(--border-radius);
+    text-align: left;
+    width: calc(50% - 40px);
+    color: var(--background-color);
+}
+
+.plan.pro {
+    background-color: #ffeb3b;
+}
+
+footer {
+    background-color: #333;
+    color: var(--text-color);
+    padding: var(--padding);
+    text-align: center;
+}
+
+footer nav a {
+    color: var(--text-color);
+    margin: 0 var(--margin);
+    text-decoration: none;
+}
+
+footer .social a {
+    color: var(--text-color);
+    margin: 0 var(--margin);
+    text-decoration: none;
+}
+
+footer .logo {
+    font-size: 20px;
+    font-weight: bold;
+}

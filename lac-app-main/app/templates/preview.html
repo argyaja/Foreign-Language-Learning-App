@@ -1,0 +1,123 @@
+{% extends 'components/base.html' %}
+{% load static %}
+
+
+{% block styles %}
+<style>
+    .card {
+        height: 200px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 10px;
+        width: 200px;
+    }
+    .card-body {
+        text-align: center;
+    }
+    .card-body p, .card-body button {
+        margin: 10px 0;
+        color: white; /* Make text white */
+    }
+    .container {
+        max-width: 960px;
+    }
+</style>
+
+{% endblock %}
+
+{% block content %}
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-12 text-center">
+            <h2>Check out your scorecard!</h2>
+            <p>Click the tiles below to reveal the solutions</p>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <!-- First row of tiles -->
+        <div class="col-6 col-sm-4 col-md-3 p-1">
+            <div class="card text-center bg-primary">
+                <div class="card-body p-2">
+                    <p class="mb-1">Trace the character</p>
+                    <p class="mb-1">Ф</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-sm-4 col-md-3 p-1">
+            <div class="card text-center bg-danger">
+                <div class="card-body p-2">
+                    <p class="mb-1">What sound does this make?</p>
+                    <button class="btn btn-light btn-sm">
+                        <i class="fa fa-volume-up"></i>
+                    </button>
+                    <p class="text-white-50">X</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-sm-4 col-md-3 p-1">
+            <div class="card text-center bg-primary">
+                <div class="card-body p-2">
+                    <p class="mb-1">What sound does this make?</p>
+                    <button class="btn btn-light btn-sm">
+                        <i class="fa fa-volume-up"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-sm-4 col-md-3 p-1">
+            <div class="card text-center bg-primary">
+                <div class="card-body p-2">
+                    <p class="mb-1">Select the character for:</p>
+                    <p class="mb-1">f</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <!-- Second row of tiles -->
+        <div class="col-6 col-sm-4 col-md-3 p-1">
+            <div class="card text-center bg-danger">
+                <div class="card-body p-2">
+                    <p class="mb-1">What do you hear?</p>
+                    <button class="btn btn-light btn-sm">
+                        <i class="fa fa-volume-up"></i>
+                    </button>
+                    <p class="text-white-50">X</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-sm-4 col-md-3 p-1">
+            <div class="card text-center bg-primary">
+                <div class="card-body p-2">
+                    <p class="mb-1">Trace the character</p>
+                    <p class="mb-1">k</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-sm-4 col-md-3 p-1">
+            <div class="card text-center bg-primary">
+                <div class="card-body p-2">
+                    <p class="mb-1">Select the character for:</p>
+                    <p class="mb-1">k</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-sm-4 col-md-3 p-1">
+            <div class="card text-center bg-primary">
+                <div class="card-body p-2">
+                    <p class="mb-1">What do you hear?</p>
+                    <button class="btn btn-light btn-sm">
+                        <i class="fa fa-volume-up"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+{% endblock %}

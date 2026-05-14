@@ -1,0 +1,85 @@
+{% load static %}
+
+<!--APP-SIDEBAR-->
+<div class="sticky">
+    <div class="app-sidebar__overlay" data-bs-toggle="sidebar"></div>
+    <div class="app-sidebar">
+        <div class="side-header">
+            <a class="header-brand1" href="index">
+                <img src="{% static 'assets/images/brand/logo.png' %}" class="header-brand-img desktop-logo" alt="logo">
+                <img src="{% static 'assets/images/brand/logo-1.png' %}" class="header-brand-img toggle-logo" alt="logo">
+                <img src="{% static 'assets/images/brand/logo-2.png' %}" class="header-brand-img light-logo" alt="logo">
+                <img src="{% static 'assets/images/brand/logo-3.png' %}" class="header-brand-img light-logo1" alt="logo">
+            </a><!-- LOGO -->
+        </div>
+        <div class="main-sidemenu">
+            <div class="slide-left disabled" id="slide-left">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="#7b8191" width="24" height="24" viewBox="0 0 24 24">
+                    <path d="M13.293 6.293 7.586 12l5.707 5.707 1.414-1.414L10.414 12l4.293-4.293z" />
+                </svg>
+            </div>
+            <ul class="side-menu">
+                <li>
+                    <h3>Menu</h3>
+                </li>
+                <li class="slide">
+                    <a class="side-menu__item has-link" data-bs-toggle="slide" href="{% url 'app:index' %}">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24">
+                            <path d="M19.9794922,7.9521484l-6-5.2666016c-1.1339111-0.9902344-2.8250732-0.9902344-3.9589844,0l-6,5.2666016C3.3717041,8.5219116,2.9998169,9.3435669,3,10.2069702V19c0.0018311,1.6561279,1.3438721,2.9981689,3,3h2.5h7c0.0001831,0,0.0003662,0,0.0006104,0H18c1.6561279-0.0018311,2.9981689-1.3438721,3-3v-8.7930298C21.0001831,9.3435669,20.6282959,8.5219116,19.9794922,7.9521484z M15,21H9v-6c0.0014038-1.1040039,0.8959961-1.9985962,2-2h2c1.1040039,0.0014038,1.9985962,0.8959961,2,2V21z M20,19c-0.0014038,1.1040039-0.8959961,1.9985962-2,2h-2v-6c-0.0018311-1.6561279-1.3438721-2.9981689-3-3h-2c-1.6561279,0.0018311-2.9981689,1.3438721-3,3v6H6c-1.1040039-0.0014038-1.9985962-0.8959961-2-2v-8.7930298C3.9997559,9.6313477,4.2478027,9.0836182,4.6806641,8.7041016l6-5.2666016C11.0455933,3.1174927,11.5146484,2.9414673,12,2.9423828c0.4853516-0.0009155,0.9544067,0.1751099,1.3193359,0.4951172l6,5.2665405C19.7521973,9.0835571,20.0002441,9.6313477,20,10.2069702V19z"/>
+                        </svg>
+                        <span class="side-menu__label">Dashboard</span>
+                    </a>
+                </li>
+                
+                {% if user.is_staff %}
+                    <li class="slide">
+                        <a class="side-menu__item has-link" data-bs-toggle="slide" href="{% url 'app:admin-courses' %}">
+                            <i class="icon-book-open side-menu__icon"></i>
+                            <span class="side-menu__label">Courses (Administrator)</span>
+                        </a>
+                    </li>
+                {% else %}
+                    <li class="slide">
+                        <a class="side-menu__item has-link" data-bs-toggle="slide" href="{% url 'app:courses' %}">
+                            <i class="icon-book-open side-menu__icon"></i>
+                            <span class="side-menu__label">Courses</span>
+                        </a>
+                    </li>
+                    <li class="slide">
+                        <a class="side-menu__item has-link" data-bs-toggle="slide" href="{% url 'app:home' %}">
+                            <i class="icon-book-open side-menu__icon"></i>
+                            <span class="side-menu__label">Course Taken</span>
+                        </a>
+                    </li>
+                {% endif %}
+                <li class="slide">
+                    <a class="side-menu__item" data-bs-toggle="slide" href="{% url 'app:leaderboards' %}">
+                        <i class="icon-trophy side-menu__icon"></i>
+                        <span class="side-menu__label">Leaderboards</span>
+                    </a>
+                </li>
+                <li class="slide">
+                    <a class="side-menu__item" data-bs-toggle="slide" href="{% url 'app:quest' %}">
+                        <i class="icon-game-controller side-menu__icon"></i>
+                        <span class="side-menu__label">Quest</span>
+                    </a>
+                </li>
+                <li class="slide">
+                    <a class="side-menu__item" data-bs-toggle="slide" href="{% url 'app:profile' %}">
+                        <i class="icon-user side-menu__icon"></i>
+                        <span class="side-menu__label">Profile</span>
+                    </a>
+                </li>
+                <li class="slide">
+                    <a class="side-menu__item" data-bs-toggle="slide" href="{% url 'app:faq' %}">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="side-menu__icon" enable-background="new 0 0 24 24" viewBox="0 0 24 24">
+                            <path d="M2.25,8.4521484l9.5,5.4804688C11.8259277,13.9767456,11.9121704,14,12,14s0.1740723-0.0232544,0.25-0.0673828l9.5-5.4804688c0.0759888-0.0438843,0.1390381-0.1069946,0.1829224-0.1829224C22.071106,8.0300293,21.9891968,7.7241211,21.75,7.5859375l-9.5-5.4755859c-0.1550903-0.0878906-0.3449097-0.0878906-0.5,0l-9.5,5.4755859C2.1740112,7.6298218,2.1109619,7.6929321,2.0670776,7.7688599C1.928833,8.0075684,2.071106,8.3244629,2.25,8.4521484z M12,3.2254639l7.5910034,4.375L12,11.9759521L4.4089966,7.6004639L12,3.2254639z M11.3162231,14.7225342L2.25,9.194519v8.4199829c0,0.1813354,0.0982666,0.3477173,0.2566528,0.4364624l9.5,5.4804688C12.1740723,23.9767456,12.0878296,24,12,24s-0.1740723-0.0232544-0.25-0.0673828l-9.5-5.4804688C2.0982666,18.8630371,2,18.6966553,2,18.5153198V10.5839233l8.75,5.0510254c0.1550903,0.0878906,0.3449097,0.0878906,0.5,0l8.75-5.0510254v7.9313965c0,0.1813354-0.0982666,0.3477173-0.2566528,0.4364624l-9.5,5.4804688C11.8259277,23.9767456,11.9121704,24,12,24s0.1740723-0.0232544,0.25-0.0673828l9.5-5.4804688c0.1583862-0.0887451,0.2566528-0.255127,0.2566528-0.4364624v-8.4199829L12.6837769,14.7225342C12.5278931,14.8104248,12.3380737,14.8104248,12.1837769,14.7225342z"/>
+                        </svg>
+                        <span class="side-menu__label">FAQs</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<!--/APP-SIDEBAR-->

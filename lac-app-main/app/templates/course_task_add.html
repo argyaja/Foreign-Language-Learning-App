@@ -1,0 +1,179 @@
+{% extends 'components/base.html' %}
+{% load static %}
+
+{% block styles %}
+<style>
+    .invalid-feedback {
+        color: red;
+        font-size: 0.8em;
+        margin-top: 0.25rem;
+    }
+</style>
+{% endblock %}
+
+{% if messages %}
+    {% for message in messages %}
+        {% if message.tags == 'error' %}
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        {% elif message.tags == 'success' %}
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        {% endif %}
+    {% endfor %}
+{% endif %}
+
+
+{% block content %}
+<!-- page header -->
+<div class="page-header">
+    <div>
+        <h1 class="page-title">Course Tasks</h1>
+    </div>
+    <div class="ms-auto pageheader-btn">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">Apps</li>
+            <li class="breadcrumb-item">
+                Courses
+            </li>
+            <li class="breadcrumb-item"><a href="#">Add Task</a></li>
+        </ol>
+    </div>
+</div>
+
+<!-- row started -->
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Add Course Task</h3>
+            </div>
+            <div class="card-body">
+                <form method="POST" id="taskForm" action="#" enctype="multipart/form-data" novalidate>
+                    {% csrf_token %}
+                    <div class="row row-sm">
+                        <div class="col-lg-12">
+                            {{ form.course }}
+                            <div class="form-group">
+                                <label for="name">Task Name</label>
+                                <input type="text" class="form-control mb-4" id="name" name="name" required value="{{ form.instance.name }}">
+                                <div class="invalid-feedback" id="name-feedback">
+                                    Please provide a valid task name.
+                                </div>
+                            </div>
+                
+                            <div class="form-group">
+                                <label for="image" class="form-label">Image</label>
+                                <input type="file" class="form-control mb-4" id="image" name="image" onchange="showPreview(event)" required>
+                                <div class="invalid-feedback" id="image-feedback">Please provide a valid image (JPG or PNG).</div>
+                                <img id="preview-image" src="" alt="Preview Image" class="img-thumbnail" style="height:150px;width:150px; display: none;">
+                            </div>
+                            <div class="form-group">
+                                <label for="level">Level</label>
+                                <input type="number" class="form-control mb-4" id="level" name="level" required min="1" max="50">
+                                <div class="invalid-feedback" id="level-feedback">
+                                    Please provide a valid level between 1 and 50.
+                                </div>
+                            </div>                     
+                        </div> 
+                    </div>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.getElementById('taskForm').addEventListener('submit', function(event) {
+        var isValid = true;
+        
+        // Validate task name field
+        var taskNameInput = document.getElementById('name');
+        var taskName = taskNameInput.value.trim();
+        if (!taskName) { // Validate task name for empty
+            isValid = false;
+            taskNameInput.classList.add('is-invalid');
+        } else {
+            taskNameInput.classList.remove('is-invalid');
+        }
+
+        // Validate level field
+        var levelInput = document.getElementById('level');
+        var level = levelInput.value.trim();
+        if (!level) {
+            isValid = false;
+            levelInput.classList.add('is-invalid');
+        } else {
+            levelInput.classList.remove('is-invalid');
+        }
+
+        if (!isValid) {
+            event.preventDefault(); // Prevent form submission if invalid
+        }
+    });
+
+    document.getElementById('image').addEventListener('change', function() {
+        var file = this.files[0];
+        var fileType = file.type;
+        var validTypes = ['image/jpeg', 'image/png'];
+
+        if (!validTypes.includes(fileType)) {
+            this.setCustomValidity('Please select a JPG or PNG file.');
+            this.reportValidity();
+        } else {
+            this.setCustomValidity('');
+            this.reportValidity();
+            showPreview(event); // Call showPreview function only if the file is valid
+        }
+    });
+
+    function showPreview(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const previewImage = document.getElementById('preview-image');
+                previewImage.src = e.target.result;
+                previewImage.style.display = 'block'; // Tampilkan gambar pratinjau
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.getElementById('taskForm');
+    
+        form.addEventListener('submit', function (event) {
+            // Reset validation state
+            form.classList.remove('was-validated');
+    
+            if (!form.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
+                form.classList.add('was-validated');
+            }
+        });
+    
+        // Event listener for each input to remove validation styles on focus
+        const inputs = form.querySelectorAll('input, select, textarea');
+        inputs.forEach(input => {
+            input.addEventListener('focus', () => {
+                input.classList.remove('is-invalid');
+                input.classList.remove('is-valid');
+            });
+        });
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,108 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lesson Complete</title>
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-family: Arial, sans-serif;
+            background-color: #ffffff;
+        }
+        .content {
+            text-align: center;
+        }
+        .image-placeholder {
+            height: 200px;
+            width: 200px;
+            background-color: #f1f1f1;
+            margin-bottom: 20px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .title {
+            font-size: 24px;
+            color: #f9a825;
+            margin-bottom: 20px;
+        }
+        .stats {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .stats div {
+            background: #fffde7;
+            border-radius: 10px;
+            padding: 10px 20px;
+            margin: 0 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 100px; /* Set to same width */
+        }
+        .stats div.good {
+            background: #e8f5e9;
+        }
+        .stats div p {
+            margin: 5px 0;
+        }
+        .footer-buttons {
+            margin-top: 20px; /* Decreased margin-top from 40px to 20px */
+            width: 100%;
+            text-align: center;
+        }
+        .footer-buttons button {
+            background: #e0e0e0;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 0 10px;
+            font-size: 16px;
+        }
+        .footer-buttons button.continue {
+            background: #66bb6a;
+            color: white;
+        }
+        .footer {
+            position: fixed;
+            bottom: 20px;
+            width: 100%;
+            border-top: 1px solid #ddd;
+            padding-top: 10px;
+            display: flex;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="content">
+        <!-- Placeholder for image -->
+       <img src="{% static 'assets/images/media/Jempol.png'%}" alt="Lesson Complete" style="width:350px;">
+            <div class="title mt-5">Lesson Complete!</div>
+        <div class="stats">
+        <br>
+            <div>
+                <p>TOTAL XP</p>
+                <p>⚡ 12</p>
+            </div>
+            <div class="good">
+                <p>GOOD!</p>
+                <p>✅ 88%</p>
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+        <div class="footer-buttons">
+            <button>REVIEW LESSON</button>
+            <button class="continue">CONTINUE</button>
+        </div>
+    </div>
+</body>
+</html>

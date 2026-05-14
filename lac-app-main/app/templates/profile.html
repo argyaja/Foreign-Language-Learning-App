@@ -1,0 +1,198 @@
+{% extends 'components/base.html' %}
+{% load static %}
+
+    {% block styles %}
+
+    {% endblock %}
+    
+        {% block content %}
+
+							<!-- PAGE-HEADER -->
+							<div class="page-header">
+								<div>
+									<h1 class="page-title">Profile</h1>
+								</div>
+								<div class="ms-auto pageheader-btn">
+									<ol class="breadcrumb">
+										<li class="breadcrumb-item"><a href="javascript:void(0);">Pages</a></li>
+										<li class="breadcrumb-item active" aria-current="page">Profile</li>
+									</ol>
+								</div>
+							</div>
+							<!-- PAGE-HEADER END -->
+
+							<!-- ROW-1 OPEN -->
+							<div class="row" id="user-profile">
+								<div class="col-lg-12">
+									<div class="card">
+										<div class="card-body">
+											<div class="row align-items-center">
+												<div class="col-lg-12 col-md-12 col-xl-6">
+													<div class="d-flex flex-wrap align-items-center">
+														<div class="profile-img-main rounded mt-2">
+															{% if user_details.profile_picture and user_details.profile_picture.url %}
+																<img src="{{ user_details.profile_picture.url }}" alt="Profile Image" class="m-0 p-1 rounded hrem-6">
+															{% else %}
+																<img src="{% static 'assets/images/faces/p-1.jpg' %}" alt="Default Profile Image" class="m-0 p-1 rounded hrem-6">
+															{% endif %}
+														</div>
+														<div class="ms-4">
+															<h2 style="text-transform: capitalize;">{{ user.username }}</h2>
+															<p class="text-muted mb-2">Member Since: {{ user.date_joined|date:"F Y" }}</p>
+															<a href="{% url 'app:edit_profile' %}" class="btn btn-primary btn-sm"><i class="fa fa-rss"></i> Edit Profile</a>
+															{% comment %} <a href="mail-inbox" class="btn btn-secondary btn-sm"><i class="fa fa-envelope"></i> E-mail</a> {% endcomment %}
+														</div>
+													</div>
+												</div>
+												<div class="col-lg-12 col-md-12 col-xl-6">
+													<div class="d-md-flex flex-wrap justify-content-lg-end">
+														<div class="media m-3">
+															<div class="media-icon bg-primary me-3 mt-1">
+																<i class="fe fe-file-plus fs-20 text-white"></i>
+															</div>
+															<div class="media-body">
+																<span class="text-muted">Posts</span>
+																<div class="fw-semibold fs-25">
+																	328
+																</div>
+															</div>
+														</div>
+														<div class="media m-3">
+															<div class="media-icon bg-info me-3 mt-1">
+																<i class="fe fe-users fs-20 text-white"></i>
+															</div>
+															<div class="media-body">
+																<span class="text-muted">Followers</span>
+																<div class="fw-semibold fs-25">
+																	937k
+																</div>
+															</div>
+														</div>
+														<div class="media m-3">
+															<div class="media-icon bg-warning me-3 mt-1">
+																<i class="fe fe-wifi fs-20 text-white"></i>
+															</div>
+															<div class="media-body">
+																<span class="text-muted">Following</span>
+																<div class="fw-semibold fs-25">
+																	2,876
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="border-top">
+											<div class="wideget-user-tab">
+												<div class="tab-menu-heading">
+													<div class="tabs-menu1">
+														<ul class="nav">
+															<li><a href="#profileMain" class="active show" data-bs-toggle="tab">Profile</a></li>
+															<li><a href="#timeline" data-bs-toggle="tab">Timeline</a></li>
+															<li><a href="#gallery" data-bs-toggle="tab">Gallery</a></li>
+															<li><a href="#friends" data-bs-toggle="tab">Friends</a></li>
+														</ul>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="tab-content">
+										<div class="tab-pane active show" id="profileMain">
+											<div class="card">
+												<div class="card-body">
+													<h3 class="card-title">About</h3>
+													<p class="text-dark-light">
+														{% if user_details.about %}
+															{{ user_details.about }}
+														{% else %}
+															Not specified
+														{% endif %}
+													</p>
+												</div>
+												<div class="border-top"></div>
+												<div class="table-responsive p-5">
+													<h3 class="card-title">Personal Info</h3>
+													<table class="table row table-borderless">
+														<tbody class="col-lg-12 col-xl-6 p-0">
+															<tr>
+																<td><strong>Full Name :</strong>
+																	{% if user_details.first_name or user_details.last_name %}
+																		{{ user_details.first_name }} {{ user_details.last_name}}
+																	{% else %}
+																		Not specified
+																	{% endif %}
+																</td>
+															</tr>
+															<tr>
+																<td><strong>Languages :</strong>
+																	{% if user_details.language %}
+																		{{ user_details.language.name }}
+																	{% else %}
+																		Not specified
+																	{% endif %}
+																</td>
+															</tr>
+														</tbody>
+														<tbody class="col-lg-12 col-xl-6 p-0 border-top-0">
+															<tr>
+																<td><strong>Email :</strong>
+																	{% if user.email %}
+																		{{ user.email }}
+																	{% else %}
+																		Not specified
+																	{% endif %}
+																</td>
+															</tr>
+															<tr>
+																<td><strong>Phone :</strong>
+																	{% if user_details.phone %}
+																		{{ user_details.phone }}
+																	{% else %}
+																		Not specified
+																	{% endif %}
+																</td>
+															</tr>
+														</tbody>
+													</table>
+												</div>
+											</div>
+										</div>
+										<div class="tab-pane" id="timeline">
+											<!-- Timeline content goes here -->
+										</div>
+										<div class="tab-pane" id="gallery">
+											<!-- Gallery content goes here -->
+										</div>
+										<div class="tab-pane" id="friends">
+											<!-- Friends content goes here -->
+										</div>
+									</div>
+								</div>
+							</div>							
+        {% endblock %}
+
+    {% block scripts %}
+
+		<!-- INTERNAL GALLERY JS -->
+		<script src=" {% static 'assets/plugins/gallery/picturefill.js' %} "></script>
+        <script src=" {% static 'assets/plugins/gallery/lightgallery.js' %} "></script>
+        <script src=" {% static 'assets/plugins/gallery/lg-pager.js' %} "></script>
+        <script src=" {% static 'assets/plugins/gallery/lg-autoplay.js' %} "></script>
+        <script src=" {% static 'assets/plugins/gallery/lg-fullscreen.js' %} "></script>
+        <script src=" {% static 'assets/plugins/gallery/lg-zoom.js' %} "></script>
+        <script src=" {% static 'assets/plugins/gallery/lg-hash.js' %} "></script>
+        <script src=" {% static 'assets/plugins/gallery/lg-share.js' %} "></script>
+		<script src=" {% static 'assets/plugins/gallery/lightgallery-1.js' %} "></script>
+
+		<!-- PROFILE JS -->
+		<script src=" {% static 'assets/js/profile.js' %} "></script>
+
+        <!-- THEMECOLORS JS -->
+        <script src="{% static 'assets/js/themeColors.js'%}"></script>
+
+    {% endblock %}
+
+
+

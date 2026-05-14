@@ -1,0 +1,194 @@
+{% extends 'components/base.html' %}
+{% load static %}
+
+{% block styles %}
+<script>
+.invalid-feedback {
+    color: red;
+    font-size: 0.8em;
+    margin-top: 0.25rem;
+  }
+</script>
+{% endblock %}
+
+{% if messages %}
+    {% for message in messages %}
+        {% if message.tags == 'error' %}
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        {% endif %}
+    {% endfor %}
+{% endif %}
+
+{% block content %}
+<!-- page header -->
+<div class="page-header">
+    <div>
+        <h1 class="page-title">Courses</h1>
+    </div>
+    <div class="ms-auto pageheader-btn">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">Apps</li>
+            <li class="breadcrumb-item">
+                Courses
+            </li>
+            <li class="breadcrumb-item"><a href="#">Add-course</a></li>
+        </ol>
+    </div>
+</div>
+
+<!-- row started -->
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Add Course</h3>
+            </div>
+            <div class="card-body">
+                <form method="POST" id="myForm" action="{% url 'app:admin-add-course' %}" enctype="multipart/form-data" novalidate>
+                    {% csrf_token %}
+                    <div class="row row-sm">
+                        <div class="col-lg-16">
+                            <div class="form-group">
+                                <label for="name">Name</label>
+                                <select class="form-control mb-4" id="name" name="name" required>
+                                    <option value="">Select a name</option>
+                                    {% for value, display in lang %}
+                                    <option value="{{ value }}">{{ display }}</option>
+                                    {% endfor %}
+                                    <div class="invalid-feedback" id="name-feedback">
+                                        Please provide a valid name.
+                                    </div>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="image" class="form-label">Image</label>
+                                <input type="file" class="form-control mb-4" id="image" name="image" onchange="showPreview(event)" required>
+                                <div class="invalid-feedback" id="image-feedback">Please provide a valid image (JPG or PNG).</div>
+                                <img id="preview-image" src="" alt="Preview Image" class="img-thumbnail" style="height:150px;width:150px; display: none;">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="description">Description</label>
+                                <textarea class="form-control mb-4" id="description" name="description" required>{{ form.instance.description }}</textarea>
+                                <div class="invalid-feedback" id="description-feedback">
+                                    Please provide a valid description.
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="flag_icon">Flag</label>
+                                <select class="form-control mb-4" id="flag_icon" name="flag_icon" required>
+                                    <option value="">Select a flag</option>
+                                    {% for value, display in flag_icon_choices %}
+                                        <option value="{{ value }}">{{ display }}</option>
+                                    {% endfor %}
+                                </select>
+                                <div class="invalid-feedback" id="flag_icon-feedback">
+                                    Please select a valid flag.
+                                </div>
+                            </div>                            
+                        </div> 
+                    </div>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                    <a type="cancel" class="btn btn-danger" href= "{% url 'app:admin-courses' %}">Cancel</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.getElementById('myForm').addEventListener('submit', function(event) {
+        var isValid = true;
+        
+        // Validate name field
+        var nameInput = document.getElementById('name');
+        var name = nameInput.value.trim();
+        if (!name) { // Validate name for empty or contains space
+            isValid = false;
+            nameInput.classList.add('is-invalid');
+        } else {
+            nameInput.classList.remove('is-invalid');
+        }
+
+        // Validate description field
+        var descriptionInput = document.getElementById('description');
+        var description = descriptionInput.value.trim();
+        if (!description) {
+            isValid = false;
+            descriptionInput.classList.add('is-invalid');
+        } else {
+            descriptionInput.classList.remove('is-invalid');
+        }
+
+        if (!isValid) {
+            event.preventDefault(); // Prevent form submission if invalid
+        }
+    });
+    
+
+    const imageElm = document.getElementById("image");
+    document.getElementById('image').addEventListener('change', function() {
+        var file = this.files[0];
+        var fileType = file.type;
+        var validTypes = ['image/jpeg', 'image/png'];
+
+        if (!validTypes.includes(fileType)) {
+            this.setCustomValidity('Please select a JPG or PNG file.');
+            this.reportValidity();
+        } else {
+            this.setCustomValidity('');
+            this.reportValidity();
+        }
+    });
+
+    function showPreview(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const previewImage = document.getElementById('preview-image');
+                previewImage.src = e.target.result;
+                previewImage.style.display = 'block'; // Tampilkan gambar pratinjau
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.getElementById('myForm');
+    
+        form.addEventListener('submit', function (event) {
+            // Reset validation state
+            form.classList.remove('was-validated');
+    
+            if (!form.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
+                form.classList.add('was-validated');
+            }
+        });
+    
+        // Event listener for each input to remove validation styles on focus
+        const inputs = form.querySelectorAll('input, select, textarea');
+        inputs.forEach(input => {
+            input.addEventListener('focus', () => {
+                input.classList.remove('is-invalid');
+                input.classList.remove('is-valid');
+            });
+        });
+    });
+
+    
+</script>
+{% endblock %}

@@ -1,0 +1,130 @@
+{% extends 'components/base.html' %}
+{% load static %}
+
+    {% block styles %}
+
+    {% endblock %}
+    
+        {% block content %}
+        
+            <!-- PAGE-HEADER -->
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">Courses</h1>
+                </div>
+                <div class="ms-auto pageheader-btn">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">Apps</li>
+                        <li class="breadcrumb-item"><a href="javascript:void(0);">Courses</a></li>
+                        {% comment %} <li class="breadcrumb-item active" aria-current="page">Projects-List</li> {% endcomment %}
+                    </ol>
+                </div>
+            </div>
+            <!-- PAGE-HEADER END -->
+
+            <!--ROW OPENED-->
+            
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-body p-4">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <h4 class="m-0">All Courses</h4>
+                                <div class="btn-list">
+                                    <a class="btn btn-outline-primary" href="{% url 'app:admin-add-course'%}">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="fe fe-plus" enable-background="new 0 0 24 24" viewBox="0 0 24 24"><path d="M19,11H13V5a1,1,0,0,0-2,0v6H5a1,1,0,0,0,0,2h6v6a1,1,0,0,0,2,0V13h6a1,1,0,0,0,0-2Z"/></svg>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-12 col-sm-12">
+                    <div class="card">
+                        <div class="card-body">                            
+                            <div class="table-responsive">                                
+                                <table class="table text-nowrap text-md-nowrap table-bordered">                                    
+                                    <div class="mb-3">
+                                        <input type="text" id="searchInput" placeholder="Search..." class="form-control">
+                                    </div>
+                                    <table id="courseTable" class="table text-nowrap mb-3 table-bordered border-top border-bottom project-list-main">
+                                        <thead class="table-head">
+                                            <tr>
+                                                <th class="bg-transparent border-bottom-0 w-5">no</th>
+                                                <th class="bg-transparent border-bottom-0">Title</th>
+                                                <th class="bg-transparent border-bottom-0 no-btn">Action</th>
+                                            </tr>
+                                        </thead>
+                                        {% for x in Courses %}
+                                        <tbody class="table-body">
+                                            <div class="modal fade" id="deleteModal{{ x.id }}" tabindex="-1" aria-labelledby="exampleModalLabel{{ x.id }}" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h1 class="modal-title fs-5" id="exampleModalLabel{{ x.id }}">Delete Course</h1>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            Are you sure you want to delete the course "<strong>{{ x.name }}</strong>"?
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                            <a href="{% url 'app:admin-delete-course' x.id %}" class="btn btn-primary">Delete</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <tr>
+                                                <td class="text-muted fs-15 fw-semibold text-center">{{ forloop.counter }}.</td>
+                                                <td>
+                                                    <h6 class="mb-0 fs-14 fw-semibold">{{ x.name }} {{ x.vers }}</h6>
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex align-items-stretch">
+                                                        <a class="btn btn-sm btn-outline-secondary border me-2" href="{% url 'app:admin-delete-course' x.id %}" data-bs-toggle="modal" data-bs-target="#deleteModal{{ x.id }}" data-bs-original-title="Delete">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 0 24 24" width="16"><path d="M0 0h24v24H0V0z" fill="none" /><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM8 9h8v10H8V9zm7.5-5l-1-1h-5l-1 1H5v2h14V4h-3.5z" /></svg>
+                                                        </a>
+                                                        <a class="btn btn-sm btn-outline-success border" href="/courses/edit/{{x.id_course}}" data-bs-original-title="Edit">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 0 24 24" width="16"><path d="M0 0h24v24H0V0z" fill="none" /><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1.003 1.003 0 0 0 0-1.42l-2.34-2.34c-.39-.39-1.02-.39-1.42 0l-1.83 1.83 3.75 3.75 1.84-1.82z" /></svg>
+                                                        </a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                        {% endfor %}
+                                    </table>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                              
+            {% endblock %}    
+
+        {% block scripts %}
+        <!-- INTERNAL DATA-TABLES JS -->
+        <script src="{% static 'assets/plugins/datatable/js/jquery.dataTables.min.js' %}"></script>
+        <script src="{% static 'assets/plugins/datatable/js/dataTables.bootstrap5.js' %}"></script>
+        <script src="{% static 'assets/plugins/datatable/dataTables.responsive.min.js' %}"></script>
+    
+        <!-- INTERNAL SELECT2 JS -->
+        <script src="{% static 'assets/plugins/select2/select2.full.min.js' %}"></script>
+    
+        <!-- PROJECT-LIST JS -->
+        <script src="{% static 'assets/js/project-list.js' %}"></script>
+    
+        <!-- THEMECOLORS JS -->
+        <script src="{% static 'assets/js/themeColors.js' %}"></script>
+        <script>
+            $(document).ready(function() {
+                $('#searchInput').on('keyup', function() {
+                    var value = $(this).val().toLowerCase();
+                    $('#courseTable tbody tr').filter(function() {
+                        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+                    });
+                });
+            });
+            </script>
+        
+    {% endblock %}

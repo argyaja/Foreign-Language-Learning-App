@@ -1,0 +1,122 @@
+{% extends 'components/base.html' %}
+{% load static %}
+
+{% block styles %}
+{% endblock %}
+
+{% block content %}
+<!-- page header -->
+<div class="page-header">
+    <div>
+        <h1 class="page-title">Modul</h1>
+    </div>
+    <div class="ms-auto pageheader-btn">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Home</a></li>
+            <li class="breadcrumb-item"><a href="#">Course Task Lists</a></li>
+            <li class="breadcrumb-item"><a href="#">Modul Detail</a></li>
+            <li class="breadcrumb-item active">Modul {% if form.instance.pk %}Edit{% else %}Create{% endif %}</li>
+        </ol>
+    </div>
+</div>
+
+{% if messages %}
+    {% for message in messages %}
+        {% if message.tags == 'success'%}
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        {% else %}
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        {% endif %}
+    {% endfor %}
+{% endif %}
+
+<!-- row started -->
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">    
+            <div class="card-header">
+                <h class="card-title">{% if form.instance.pk %}Edit{% else %}Create{% endif %} Modul</h1>
+            </div>
+            <div class="card-body pb-2">
+                <form method="POST" id="myForm" action="{% if form.instance.pk %}{% url 'app:modul_update' course_id=task.course.id task_id=task.id modul_id=form.instance.pk %}{% else %}{% url 'app:modul_create' course_id=task.course.id task_id=task.id %}{% endif %}" enctype="multipart/form-data" novalidate>
+                    {% csrf_token %}
+                    <div class="row row-sm">
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label for="name">Modul Name</label>
+                                <input type="text" class="form-control mb-4" id="name" name="name" value="{{ form.name.value|default_if_none:'' }}" required>
+                                <div class="invalid-feedback" id="name-feedback">
+                                    Please provide a valid name.
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="description">Description</label>
+                                <textarea class="form-control mb-4" id="description" name="description" required>{{ form.description.value|default_if_none:'' }}</textarea>
+                                <div class="invalid-feedback" id="description-feedback">
+                                    Please provide a valid description.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                    <a type="cancel" class="btn btn-danger" href="{% url 'app:Modul_detail' course_id=task.course.id task_id=task.id %}">Cancel</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.getElementById('myForm');
+    
+        form.addEventListener('submit', function (event) {
+            // Reset validation state
+            form.classList.remove('was-validated');
+    
+            if (!form.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
+                form.classList.add('was-validated');
+            }
+        });
+    
+        // Event listener for each input to remove validation styles on focus
+        const inputs = form.querySelectorAll('input, select, textarea');
+        inputs.forEach(input => {
+            input.addEventListener('focus', () => {
+                input.classList.remove('is-invalid');
+                input.classList.remove('is-valid');
+            });
+
+            input.addEventListener('blur', () => {
+                if (input.value === '') {
+                    input.classList.remove('is-invalid');
+                    input.classList.remove('is-valid');
+                } else {
+                    if (input.checkValidity()) {
+                        input.classList.add('is-valid');
+                        input.classList.remove('is-invalid');
+                    } else {
+                        input.classList.add('is-invalid');
+                        input.classList.remove('is-valid');
+                    }
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}

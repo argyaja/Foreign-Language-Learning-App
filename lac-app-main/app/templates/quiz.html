@@ -1,0 +1,342 @@
+{% extends 'components/base.html' %}
+{% load static %}
+
+{% block styles %}
+{% endblock %}
+
+{% block content %}
+<!-- PAGE-HEADER -->
+<div class="page-header">
+    <div class="ms-auto pageheader-btn">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="javascript:void(0);">Course</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ course.name }} - {{ task.name }} - level {{ task.level }}</li>
+        </ol>
+    </div>
+</div>
+<!-- PAGE-HEADER END -->
+
+<!-- Model Untuk Pilihan Yang Benar -->
+<div class="modal fade" id="modaldemo4">
+    <div class="modal-dialog modal-dialog-centered text-center" role="document">
+        <div class="modal-content tx-size-sm">
+            <div class="modal-body text-center p-4">
+                <h4 class="text-success tx-semibold">Congratulations!</h4>
+                <p class="text-muted">Jawaban kamu benar.</p>
+                <div>
+                    {% if tasks_page.has_next %}
+                    <a href="?page={{ tasks_page.next_page_number }}" class="btn btn-orange"><i class="fe fe-chevron-right"></i><b>Next</b></a>
+                    {% else %}
+                    <form method="post" action="">
+                        {% csrf_token %}
+                        <button type="submit" name="finish" class="btn btn-success"><i class="ion-checkmark-circled"></i><b> Finish</b></button>
+                    </form>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END Model Untuk Pilihan Yang Benar -->
+
+<!-- Model Untuk Pilihan Yang Salah -->
+<div class="modal fade" id="modaldemo5">
+    <div class="modal-dialog modal-dialog-centered text-center" role="document">
+        <div class="modal-content tx-size-sm">
+            <div class="modal-body text-center p-4">
+                {% for x in tasks_page %}
+                <h4 class="text-danger">Jawaban kamu salah !</h4>
+                <p class="text-muted">Jawaban yang benar adalah : <b> {{ x.option1 }}</b></p>
+                <div>
+                    {% if tasks_page.has_next %}
+                    <a href="?page={{ tasks_page.next_page_number }}" class="btn btn-orange"><i class="fe fe-chevron-right"></i><b>Next</b></a>
+                    {% else %}
+                    <a href="{% url 'app:Modul_detail' course_id=course.id task_id=task.id %}" class="btn btn-primary"><b>Finish</b></a>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END Model Untuk Pilihan Yang Salah -->
+
+<!-- Section for quiz -->
+<div class="row">
+    <div class="col-xl-12 col-sm-12">
+        <div class="card">
+            <nav class="navbar navbar-light bg-info">
+                <a class="navbar-brand text-white" href="#">{{ course.name }} - {{ task.name }} - level {{ task.level }}</a>
+            </nav>
+            <div class="card-body">
+                <div class="example">
+                    {% for task in tasks_page %}
+                        {% if task.type_name == 'TaskQuestionAudio' %}
+                        <div class="progress progress-lg">
+                            <div id="progress-bar" class="progress-bar progress-bar-animated bg-success" role="progressbar"></div>
+                        </div>
+                        <br>
+
+                        <!-- Belajar -->
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <p>{{ course.name }}</p>
+                                <div class="form-label"><h2>{{ task.question_text }}</h2><button onclick="speakText('{{ task.question_text }}')" class="btn btn-pill"><i class="fe fe-volume-2"></i></button></div>
+                                <br>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="btn-list text-end">
+                                    {% if tasks_page.has_next %}
+                                    <a href="?page={{ tasks_page.next_page_number }}" class="btn btn-orange"><b>Next </b><i class="fa fa-chevron-right"></i><i class="fa fa-chevron-right"></i></a>
+                                    {% else %}
+                                    <a href="{% url 'app:Modul_detail' course_id=course.id task_id=task.id %}" class="btn btn-success"><i class="ion-checkmark-circled"></i><b> Finish</b></a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                        <p>Word Translation</p>
+                        <div class="form-label"><h2>{{ task.answer }}</h2><button onclick="speakTextIndo('{{ task.answer }}')" class="btn btn-pill"><i class="fe fe-volume-2"></i></button>
+                        </div>
+                        <!-- END Belajar -->
+
+                        <!-- Soal Task -->
+                        {% elif task.type_name == 'TaskQuestionMCQ' %}
+                        <div class="progress progress-lg">
+                            <div id="progress-bar" class="progress-bar progress-bar-animated bg-success" role="progressbar"></div>
+                        </div>
+                        <br>
+                        <div class="container">
+                            <div class="question-container text-center mt-4">
+                                <h2>{{ task.question_text }}</h2>
+                            </div>
+                            <div class="row mt-4 options-container">
+                                <div class="col-md-6">
+                                    <button type="button" class="btn btn-outline-light btn-lg btn-block mb-2 option-button" data-bs-target="#modaldemo4" data-bs-toggle="modal" href="#" onclick="speakText('{{ task.option1 }}')">
+                                        <a class="me-1 text-default my-1">
+                                            <b>{{ task.option1 }}</b>
+                                        </a>
+                                    </button>
+                                </div>
+                                <div class="col-md-6">
+                                    <button type="button" class="btn btn-outline-light btn-lg btn-block mb-2 option-button" data-bs-target="#modaldemo5" data-bs-toggle="modal" href="#" onclick="speakText('{{ task.option2 }}')">
+                                        <a class="me-1 text-default my-1">
+                                            <b>{{ task.option2 }}</b>
+                                        </a>
+                                    </button>
+                                </div>
+                                <div class="col-md-6">
+                                    <button type="button" class="btn btn-outline-light btn-lg btn-block mb-2 option-button" data-bs-target="#modaldemo5" data-bs-toggle="modal" href="#" onclick="speakText('{{ task.option3 }}')">
+                                        <a class="me-1 text-default my-1">
+                                            <b>{{ task.option3 }}</b>
+                                        </a>
+                                    </button>
+                                </div>
+                                <div class="col-md-6">
+                                    <button type="button" class="btn btn-outline-light btn-lg btn-block mb-2 option-button" data-bs-target="#modaldemo5" data-bs-toggle="modal" href="#" onclick="speakText('{{ task.option4 }}')">
+                                        <a class="me-1 text-default my-1">
+                                            <b>{{ task.option4 }}</b>
+                                        </a>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="text-center mt-4">
+                                <button type="button" class="btn btn-orange" onclick="goBack()">
+                                    <i class="ion-help fs-1" data-bs-toggle="tooltip" title="ion-help"></i><br>
+                                    <strong>I don't know</strong>
+                                </button>
+                            </div>
+                        </div>
+                        <!-- END Soal -->
+
+                        <!-- Soal Video -->
+                        {% elif task.type_name == 'TaskQuestionVideo' %}
+                        <div class="progress progress-lg">
+                            <div id="progress-bar" class="progress-bar progress-bar-animated bg-success" role="progressbar"></div>
+                        </div>
+                        <br>
+                        <div class="row">
+                            <div class="col-md-6 text-center">
+                                <div class="video-container">
+                                    <video width="50%" controls>
+                                        <source src="{{ task.video.url }}" type="video/mp4">
+                                        Your browser does not support the video tag.
+                                    </video>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="row mt-4 options-container">
+                                    <div class="col-md-12 mb-2">
+                                        <button type="button" class="btn btn-outline-light btn-lg btn-block option-button" data-bs-target="#modaldemo4" data-bs-toggle="modal" onclick="speakText('{{ task.option1 }}')">
+                                            <a class="me-1 text-default my-1">
+                                                <b>{{ task.option1 }}</b>
+                                            </a>
+                                        </button>
+                                    </div>
+                                    <div class="col-md-12 mb-2">
+                                        <button type="button" class="btn btn-outline-light btn-lg btn-block option-button" data-bs-target="#modaldemo5" data-bs-toggle="modal" onclick="speakText('{{ task.option2 }}')">
+                                            <a class="me-1 text-default my-1">
+                                                <b>{{ task.option2 }}</b>
+                                            </a>
+                                        </button>
+                                    </div>
+                                    <div class="col-md-12 mb-2">
+                                        <button type="button" class="btn btn-outline-light btn-lg btn-block option-button" data-bs-target="#modaldemo5" data-bs-toggle="modal" onclick="speakText('{{ task.option3 }}')">
+                                            <a class="me-1 text-default my-1">
+                                                <b>{{ task.option3 }}</b>
+                                            </a>
+                                        </button>
+                                    </div>
+                                    <div class="col-md-12 mb-2">
+                                        <button type="button" class="btn btn-outline-light btn-lg btn-block option-button" data-bs-target="#modaldemo5" data-bs-toggle="modal" onclick="speakText('{{ task.option4 }}')">
+                                            <a class="me-1 text-default my-1">
+                                                <b>{{ task.option4 }}</b>
+                                            </a>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-center mt-4">
+                            <button type="button" class="btn btn-orange" onclick="goBack()">
+                                <i class="ion-help fs-1" data-bs-toggle="tooltip" title="ion-help"></i><br>
+                                <strong>I don't know</strong>
+                            </button>
+                        </div>
+                        <!-- END Soal Video -->
+
+                        <!-- Soal Fill -->
+                        {% elif task.type_name == 'TaskQuestionFill' %}
+                        <div class="progress progress-lg">
+                            <div id="progress-bar" class="progress-bar progress-bar-animated bg-success" role="progressbar"></div>
+                        </div>
+                        <br>
+                        <div class="container">
+                            <div class="question-container text-center mt-4">
+                                <h2>{{ task.question_text }}</h2>
+                            </div>
+                            <div class="row mt-4">
+                                <div class="col-md-12">
+                                    <input type="text" class="form-control form-control-lg" id="answer-input" placeholder="Enter your answer here">
+                                </div>
+                            </div>
+                            <div class="text-center mt-4">
+                                <button type="button" class="btn btn-outline-success btn-lg btn-block" onclick="checkAnswer('{{ task.answer }}')">
+                                    <b>Submit</b>
+                                </button>
+                            </div>
+                        </div>
+                        <!-- END Soal Fill -->
+
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+
+    document.addEventListener('DOMContentLoaded', function() {
+        var progressBar = document.getElementById('progress-bar');
+        var currentPageNumber = {{ tasks_page.number }};
+        var totalTasks = {{ total_tasks }};
+        
+        var progressWidth = (currentPageNumber / totalTasks) * 100;
+        progressBar.style.width = progressWidth + '%';
+        progressBar.textContent = currentPageNumber + '/' + totalTasks;
+    });
+    
+    const courseNameToLanguage = {
+        'Bahasa Afrikaans (Afrika Selatan)': 'af-ZA',
+        'Bahasa Arab': 'ar-SA',
+        'Bahasa Bulgaria': 'bg-BG',
+        'Bahasa Catalan (Spanyol)': 'ca-ES',
+        'Bahasa Ceko': 'cs-CZ',
+        'Bahasa Denmark': 'da-DK',
+        'Bahasa Belanda': 'nl-NL',
+        'Bahasa Inggris (Australia)': 'en-AU',
+        'Bahasa Inggris (Kanada)': 'en-CA',
+        'Bahasa Inggris (Inggris)': 'en-GB',
+        'Bahasa Inggris (India)': 'en-IN',
+        'Bahasa Selandia Baru': 'en-NZ',
+        'Bahasa Inggris (Afrika Selatan)': 'en-ZA',
+        'Bahasa Inggris (Amerika Serikat)': 'en-US',
+        'Bahasa Finlandia': 'fi-FI',
+        'Bahasa Kanada': 'fr-CA',
+        'Bahasa Prancis': 'fr-FR',
+        'Bahasa Jerman': 'de-DE',
+        'Bahasa Yunani': 'el-GR',
+        'Bahasa Israel': 'he-IL',
+        'Bahasa India': 'hi-IN',
+        'Bahasa Hongaria': 'hu-HU',
+        'Bahasa Indonesia': 'id-ID',
+        'Bahasa Italia': 'it-IT',
+        'Bahasa Jepang': 'ja-JP',
+        'Bahasa Korea': 'ko-KR',
+        'Bahasa Cina': 'zh-CN',
+        'Bahasa Hong Kong': 'zh-HK',
+        'Bahasa Taiwan': 'zh-TW',
+        'Bahasa Norwegia': 'nb-NO',
+        'Bahasa Polandia': 'pl-PL',
+        'Bahasa Brasil': 'pt-BR',
+        'Bahasa Portugal': 'pt-PT',
+        'Bahasa Rumania': 'ro-RO',
+        'Bahasa Rusia': 'ru-RU',
+        'Bahasa Slowakia': 'sk-SK',
+        'Bahasa Argentina': 'es-AR',
+        'Bahasa Chili': 'es-CL',
+        'Bahasa Kolombia': 'es-CO',
+        'Bahasa Meksiko': 'es-MX',
+        'Bahasa Spanyol': 'es-ES',
+        'Bahasa Swedia': 'sv-SE',
+        'Bahasa Thailand': 'th-TH',
+        'Bahasa Turki': 'tr-TR'
+    };
+    
+
+    const language = courseNameToLanguage['{{ course.name }}'] || 'en-GB';
+
+    function speakText(text) {
+        const msg = new SpeechSynthesisUtterance();
+        msg.text = text;
+        msg.lang = language;
+        window.speechSynthesis.speak(msg);
+    }
+
+    function speakTextIndo(text) {
+        var msg = new SpeechSynthesisUtterance();
+        msg.text = text;
+        msg.lang = 'id-ID'; // Indonesian language       
+        window.speechSynthesis.speak(msg);
+    }
+
+    function shuffle(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+        const optionContainers = document.querySelectorAll('.options-container');
+        optionContainers.forEach(container => {
+            const buttons = Array.from(container.getElementsByClassName('option-button'));
+            const shuffledButtons = shuffle(buttons);
+
+            container.innerHTML = '';
+            shuffledButtons.forEach(button => container.appendChild(button.closest('.col-md-6') || button.closest('.col-md-12')));
+        });
+    });
+
+    function goBack() {
+        window.history.back();
+    }
+
+</script>
+{% endblock %}

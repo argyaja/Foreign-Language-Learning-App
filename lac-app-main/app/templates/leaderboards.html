@@ -1,0 +1,88 @@
+{% extends 'components/base.html' %}
+{% load static %}
+
+{% block styles %}
+{% endblock %}
+
+{% block content %}
+<!-- PAGE-HEADER -->
+<div class="page-header">
+    <div>
+        <h1 class="page-title">Leaderboard</h1>
+    </div>
+    <div class="ms-auto pageheader-btn">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">Apps</li>
+            <li class="breadcrumb-item"><a href="javascript:void(0);">E-commerce</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Cart</li>
+        </ol>
+    </div>
+</div>
+<!-- PAGE-HEADER END -->
+
+<!-- ROW-1 OPEN -->
+<div class="row">
+    <div class="col-xl-8 col-md-12">
+        <div class="card cart">
+            <div class="card-header border-bottom">
+                <h3 class="card-title text-center text-capitalize">Leaderboards from all students</h3>
+            </div>
+            <br>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table text-nowrap text-md-nowrap table-hover">
+                        <tbody>
+                            
+                            {% if leaderboard_data %}
+                                {% for user in leaderboard_data %}
+                                    <tr>
+                                        <td>{{ forloop.counter }}</td>
+                                        <td>{{ user.user__username }}</td>
+                                        <td>{{ user.total_points }} XP</td>
+                                    </tr>
+                                {% endfor %}
+                            {% else %}
+                                <div class="alert alert-info text-center" role="alert">
+                                    Belum ada data leaderboard.
+                                </div>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-4 col-md-12">
+        <div class="card">
+            <div class="card-header border-bottom">
+                <h3 class="card-title text-center text-capitalize">Your Points</h3>
+            </div>
+            <div class="card-body text-center">
+                <div class="profile-img-main rounded">
+                    {% if user_details.profile_picture and user_details.profile_picture.url %}
+                        <img src="{{ user_details.profile_picture.url }}" alt="Profile Image" class="m-0 p-1 rounded hrem-6">
+                    {% else %}
+                        <img src="{% static 'assets/images/faces/p-1.jpg' %}" alt="Default Profile Image" class="m-0 p-1 rounded hrem-6">
+                    {% endif %}
+                </div>
+                
+                {% if user.first_name and user.last_name %}
+                    <h4 class="card-text text-capitalize mt-3">{{ user.first_name }} {{ user.last_name}}</h4>
+                {% else %}
+                    <h4 class="card-text text-capitalize mt-3">{{ user.username }}</h4>
+                {% endif %}
+                <p class="card-text"><strong>{{ user_points }} XP</strong></p>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ROW-1 CLOSED -->
+
+{% endblock %}
+
+{% block scripts %}
+<!-- PRODUCT JS-->
+<script src=" {% static 'assets/js/products.js' %} "></script>
+<!-- THEMECOLORS JS -->
+<script src="{% static 'assets/js/themeColors.js'%}"></script>
+{% endblock %}

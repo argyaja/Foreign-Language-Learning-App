@@ -1,0 +1,194 @@
+{% extends 'components/base.html' %}
+{% load static %}
+
+{% block styles %}
+
+{% endblock %}
+
+{% block content %}
+
+<!-- PAGE-HEADER -->
+<div class="page-header">
+    <div>
+        <h1 class="page-title">Courses</h1>
+    </div>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb breadcrumb-style">
+            <li class="breadcrumb-item">
+                <a href="#">Home</a>
+            </li>
+            <li class="breadcrumb-item active">Course</li>
+        </ol>
+    </nav>
+</div>
+<!-- PAGE-HEADER END -->
+
+<!-- Modal -->
+
+{% if messages %}
+    {% for message in messages %}
+        {% if message.tags == 'success' %}
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        {% endif %}
+    {% endfor %}
+{% endif %}
+
+<!-- ROW OPENED -->
+<div class="row">
+    <div class="col-md-12">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body project-type-container projects p-4">
+                        <h4 class="m-0" id="typeTitle">All Courses</h4>
+                        <div class="d-sm-flex align-items-center">
+                            <div class="btn-list mx-4">
+                                {% comment %} <a class="btn btn-primary" href="#">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-inner-icn text-white" enable-background="new 0 0 24 24" viewBox="0 0 24 24"><path d="M21.5,13h-8.0005493C13.2234497,13.0001831,12.9998169,13.223999,13,13.5v8.0005493C13.0001831,21.7765503,13.223999,22.0001831,13.5,22h8.0006104C21.7765503,21.9998169,22.0001831,21.776001,22,21.5v-8.0006104C21.9998169,13.2234497,21.776001,12.9998169,21.5,13z M21,21h-7v-7h7V21z M10.5,2H2.4993896C2.2234497,2.0001831,1.9998169,2.223999,2,2.5v8.0005493C2.0001831,10.7765503,2.223999,11.0001831,2.5,11h8.0006104C10.7765503,10.9998169,11.0001831,10.776001,11,10.5V2.4993896C10.9998169,2.2234497,10.776001,1.9998169,10.5,2z M10,10H3V3h7V10z M10.5,13H2.4993896C2.2234497,13.0001831,1.9998169,13.223999,2,13.5v8.0005493C2.0001831,21.7765503,2.223999,22.0001831,2.5,22h8.0006104C10.7765503,21.9998169,11.0001831,21.776001,11,21.5v-8.0006104C10.9998169,13.2234497,10.776001,12.9998169,10.5,13z M10,21H3v-7h7V21z M21.5,2h-8.0005493C13.2234497,2.0001831,12.9998169,2.223999,13,2.5v8.0005493C13.0001831,10.7765503,13.223999,11.0001831,13.5,11h8.0006104C21.7765503,10.9998169,22.0001831,10.776001,22,10.5V2.4993896C21.9998169,2.2234497,21.776001,1.9998169,21.5,2z M21,10h-7V3h7V10z"/></svg>
+                                </a> {% endcomment %}                               
+                                <a class="btn btn-outline-primary" href="{% url 'app:admin-add-course'%}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="fe fe-plus" enable-background="new 0 0 24 24" viewBox="0 0 24 24"><path d="M19,11H13V5a1,1,0,0,0-2,0v6H5a1,1,0,0,0,0,2h6v6a1,1,0,0,0,2,0V13h6a1,1,0,0,0,0-2Z"/></svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="row">
+            <div class="tab-content">
+                <div class="tab-pane active h-100" id="allCourses">
+                    <div class="row">    
+                        {% if Courses %}
+                            {% for x in Courses %}                        
+                                <div class="col-sm-12 col-md-6 col-lg-4">
+                                    <div class="card">
+                                        <div class="card-header border-bottom">
+                                            <div class="d-flex align-items-center justify-content-between">
+                                                <div class="d-flex align-items-center flex-grow-1">
+                                                    <a href="{% url 'app:course_tasks' x.id %}" class="text-decoration-none me-2">
+                                                        <i class="flag {{ x.flag_icon }}"></i>
+                                                    </a>
+                                                    <div>
+                                                        <h6 class="mb-0">
+                                                            <a href="{% url 'app:course_tasks' x.id %}" class="text-decoration-none">
+                                                                <strong>{{ x.name }}</strong>
+                                                            </a>
+                                                        </h6>
+                                                    </div>
+                                                </div>
+                                                <div class="ms-auto">
+                                                    <a href="#" class="option-dots" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                        <i class="fe fe-more-vertical"></i>
+                                                    </a>
+                                                    <div class="dropdown-menu dropdown-menu-end">
+                                                        <a class="dropdown-item" href="{% url 'app:admin-edit-course' x.id %}">
+                                                            <i class="fe fe-edit me-2"></i> Edit
+                                                        </a>
+                                                        <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#deleteModal{{ x.id }}">
+                                                            <i class="fe fe-trash me-2"></i> Delete
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>                                                                               
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="mt-2 text-center">
+                                                        <a href="{% url 'app:course_tasks' x.id %}" class="text-decoration-none">
+                                                            <img class="img-fluid mx-auto d-block" style="height:150px;width:100%" src="{{ x.image.url }}" data-bs-image-src="{{ x.image.url }}">
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12 mt-4">
+                                                    <div class="row align-items-center">
+                                                        <!-- Additional content -->
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card-footer text-center">
+                                            <a href="{% url 'app:course_tasks' x.id %}" class="btn btn-primary">Course Description</a>
+                                        </div>
+                                        <!-- Modal -->
+                                        <div class="modal fade" id="deleteModal{{ x.id }}" tabindex="-1" aria-labelledby="exampleModalLabel{{ x.id }}" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h1 class="modal-title fs-5" id="exampleModalLabel{{ x.id }}">Delete Course</h1>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        Are you sure you want to delete the course "<strong>{{ x.name }}</strong>"?
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                        <a href="{% url 'app:admin-delete-course' x.id %}" class="btn btn-primary">Delete</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>                                                                                                                                          
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                            <div class="alert alert-info text-center" role="alert">
+                                Belum ada data course.
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+
+{% block scripts %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const allButton = document.getElementById('all');
+            const inProgressButton = document.getElementById('inProgress');
+            const completedButton = document.getElementById('completed');
+            
+            allButton.addEventListener('click', function() {
+                filterCourses(0, 100);
+            });
+    
+            inProgressButton.addEventListener('click', function() {
+                filterCourses(1, 99);
+            });
+    
+            completedButton.addEventListener('click', function() {
+                filterCourses(100, 100);
+            });
+    
+            function filterCourses(minProgress, maxProgress) {
+                const courses = document.querySelectorAll('.course-card');
+                courses.forEach(course => {
+                    const progress = parseFloat(course.getAttribute('data-progress'));
+                    if (progress >= minProgress && progress <= maxProgress) {
+                        course.style.display = 'block';
+                    } else {
+                        course.style.display = 'none';
+                    }
+                });
+            }
+    
+            // Initial load - show all courses
+            filterCourses(0, 100);
+        });
+    </script>
+{% endblock %}
